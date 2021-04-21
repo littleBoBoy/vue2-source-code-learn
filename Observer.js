@@ -86,8 +86,4 @@ function observer(data) {
   return new Observer(data).data
 }
 
-module.exports = {
-  observer,
-  Watcher,
-  Dep
-}
+export { observer, Watcher, Dep }

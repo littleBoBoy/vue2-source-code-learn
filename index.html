@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import Vue from './Vue.js'
+      const app = new Vue({
+        el: '#app',
+        data: {
+          name: '',
+          age: 0,
+          sex: '',
+          stature: {
+            weight: '',
+            height: 0
+          }
+        },
+        watch: {
+          name(newVla, oldVal) {
+            console.log('监听到name变化，由' + oldVal + '=>' + newVla)
+          }
+        },
+        computed: {
+          baseInfo() {
+            return `我叫${this.name},${this.sex},今年${this.age}岁了。我的身高是${this.stature.weight}，体重是${this.stature.weight}`
+          }
+        },
+        created() {
+          console.log(this.baseInfo)
+          this.name = '王章昊'
+          this.age = 23
+          this.sex = '男'
+          this.formatData()
+          this.stature.weight = '70kg'
+          this.stature.height = '175cm'
+          this.formatData()
+        },
+        methods: {
+          formatData() {
+            console.log(this.baseInfo)
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

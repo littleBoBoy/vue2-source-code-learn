@@ -1,5 +1,4 @@
-const { observer, Watcher, Dep } = require('./Observer')
-
+import { observer, Watcher, Dep } from './Observer.js'
 function initData(vm, data, computed) {
   Object.keys(computed).forEach(key => {
     data[key] = null
@@ -37,9 +36,15 @@ function initWatch(vm, watch) {
     new Watcher(vm, key, watch[key])
   })
 }
+
+function mount(vm, el) {
+  console.log(el)
+  const rootDom = document.querySelector(el)
+  console.log(rootDom)
+}
 function Vue(options) {
   const {
-    el: _el,
+    el,
     data = {},
     watch = {},
     computed = {},
@@ -52,6 +57,7 @@ function Vue(options) {
   initComputed(vm, computed)
   initWatch(vm, watch)
   created && created.bind(vm)() //created 钩子函数
+  el && mount(vm, el)
 }
 
-module.exports = Vue
+export default Vue
