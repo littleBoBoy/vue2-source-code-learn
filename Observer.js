@@ -48,19 +48,20 @@ function Watcher(vm, exp, cb) {
   this.vm = vm
   this.exp = exp
   this.cb = cb
-  this.value = this.get()
+  if (this.exp) this.value = this.get()
 }
 
 Watcher.prototype = {
   update: function () {
-    this.run()
-  },
-  run: function () {
+    if (!this.exp) {
+      this.cb()
+      return
+    }
     const oldVal = this.value
     const newVal = this._getValue()
     if (oldVal !== newVal) {
       this.value = newVal
-      this.cb(this.vm, newVal, oldVal)
+      this.cb(newVal, oldVal)
     }
   },
   get: function () {
@@ -70,6 +71,7 @@ Watcher.prototype = {
     return value
   },
   _getValue() {
+    if (!this.exp) return
     let keyChain = this.exp.split('.')
     const oData = keyChain.reduce((pre, key, index) => {
       if (index === keyChain.length - 1) return pre
@@ -81,10 +83,11 @@ Watcher.prototype = {
 }
 
 function observer(data) {
-  return new Observer(data)
+  return new Observer(data).data
 }
 
 module.exports = {
   observer,
-  Watcher
+  Watcher,
+  Dep
 }
