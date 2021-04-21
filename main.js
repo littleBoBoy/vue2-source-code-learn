@@ -19,6 +19,9 @@ const { observer, Watcher } = require('./Observer')
 
 function selVue(data, el, exps) {
   this.data = data
+  Object.keys(data).forEach(key => {
+    this.proxyKeys(key) //绑定代理属性
+  })
   observer(this.data)
   exps.forEach(exp => {
     new Watcher(this, exp, (vm, newVal, old) => {
@@ -33,6 +36,21 @@ function selVue(data, el, exps) {
     })
   })
 }
+selVue.prototype = {
+  proxyKeys: function (key) {
+    var self = this
+    Object.defineProperty(this, key, {
+      enumerable: false,
+      configurable: true,
+      get: function proxyGetter() {
+        return self.data[key]
+      },
+      set: function proxySetter(newVal) {
+        self.data[key] = newVal
+      }
+    })
+  }
+}
 
 const app = new selVue(
   {
@@ -43,6 +61,6 @@ const app = new selVue(
   ['book1', 'book2', 'book2.name', 'book2.page']
 )
 // app.data.book1 = { name: 'js基础教程', page: 80 }
-app.data.book2.name = 'css揭秘'
-app.data.book2.page = 100
-app.data.book2 = { name: 'js基础教程', page: 80 }
+app.book2.name = 'css揭秘'
+app.book2.page = 100
+app.book2 = { name: 'js基础教程', page: 80 }
