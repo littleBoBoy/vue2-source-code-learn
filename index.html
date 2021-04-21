@@ -7,7 +7,7 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">嘻嘻 {{baseInfo}} 哈哈</div>
     <script type="module">
       import Vue from './Vue.js'
       const app = new Vue({
@@ -32,14 +32,16 @@
           }
         },
         created() {
-          console.log(this.baseInfo)
           this.name = '王章昊'
           this.age = 23
           this.sex = '男'
-          this.formatData()
           this.stature.weight = '70kg'
           this.stature.height = '175cm'
           this.formatData()
+          setTimeout(() => {
+            this.name = '张艺菡'
+            console.log(this.baseInfo)
+          }, 2000)
         },
         methods: {
           formatData() {

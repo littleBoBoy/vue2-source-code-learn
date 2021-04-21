@@ -38,9 +38,16 @@ function initWatch(vm, watch) {
 }
 
 function mount(vm, el) {
-  console.log(el)
   const rootDom = document.querySelector(el)
-  console.log(rootDom)
+  const regex = /{{2}.*?}{2}/g
+  let sourceTemplate = rootDom.innerText
+  for (const match of sourceTemplate.matchAll(regex)) {
+    const key = match[0].slice(2, match[0].length - 2)
+    rootDom.innerText = sourceTemplate.replaceAll(match[0], vm[key])
+    new Watcher(vm, key, newVal => {
+      rootDom.innerText = sourceTemplate.replace(match[0], newVal)
+    })
+  }
 }
 function Vue(options) {
   const {
